@@ -27,6 +27,15 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    ports:
+      - 80:80
+    environment:
+      - BACHEND_SERVICE=backend:8080
+    depends_on:
+      - backend
 
 volumes:
   mysqldb:

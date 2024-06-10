@@ -4,8 +4,8 @@ WORKDIR /app
 
 COPY . ./
 
+RUN sed -i 's/\r$//' mvnw
 RUN chmod +x ./mvnw
-
 RUN ./mvnw package -DskipTests
 
 FROM openjdk:17-jdk-slim
