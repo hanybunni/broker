@@ -33,7 +33,7 @@ services:
     ports:
       - 80:80
     environment:
-      - BACHEND_SERVICE=backend:8080
+      - BACKEND_SERVICE=backend:8080
     depends_on:
       - backend
 

@@ -20,9 +20,11 @@ COPY --from=build --chown=nginx:nginx /app/build /usr/share/nginx/html
 COPY --from=build --chown=nginx:nginx /app/script.sh /script.sh
 COPY --from=build --chown=nginx:nginx /app/nginx-selfsigned.crt /etc/nginx/nginx-selfsigned.crt
 COPY --from=build --chown=nginx:nginx /app/nginx-selfsigned.key /etc/nginx/nginx-selfsigned.key
+
 EXPOSE 80
 
 RUN apk add dos2unix
+
 RUN dos2unix /usr/share/nginx/html
 RUN dos2unix /script.sh
 RUN dos2unix /etc/nginx/nginx-selfsigned.crt
