@@ -23,7 +23,8 @@ public class CurrentlyOwnedAssets {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long uuid;
+    @Column(name = "currentlyOwnedAssetID", insertable = false, updatable = false, nullable = false, unique = true)
+    private Long currentlyOwnedAssetID;
 
     @Column(name = "no_of_shares", nullable = false)
     private Integer no_of_shares;
@@ -31,12 +32,12 @@ public class CurrentlyOwnedAssets {
     @Column(name = "avg_price", nullable = false)
     private Double avg_price;
 
-    @JsonManagedReference
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "assetID", nullable = false)
     private Asset asset;
 
-    @JsonManagedReference
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "accountID", nullable = false)
     private Account account;

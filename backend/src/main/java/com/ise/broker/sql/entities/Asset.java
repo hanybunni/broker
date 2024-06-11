@@ -33,12 +33,6 @@ public class Asset {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "type", nullable = false)
-    private String type;
-
-    @Column(name = "sector", nullable = false)
-    private String sector;
-
     @Column(name = "price", nullable = false)
     private Double price;
 
@@ -46,26 +40,20 @@ public class Asset {
     private String currency;
 
     @JsonManagedReference
-    @JsonBackReference
     @ManyToMany(mappedBy = "assets")
     private Set<Watchlist> watchlists = new HashSet<>();
 
-    // Self note: Many to many assets (Asset can contain other assets, assets can be conatained in other assets)
     @JsonManagedReference
     @JsonBackReference
-    @ManyToMany(cascade = {CascadeType.ALL})
-    @JoinTable(
-            name = "assets_of_asset",
-            joinColumns = {@JoinColumn(name = "parent_assetID")},
-            inverseJoinColumns = {@JoinColumn(name = "child_assetID")}
-    )
+    @ManyToMany(cascade = { CascadeType.ALL })
+    @JoinTable(name = "assets_of_asset", joinColumns = { @JoinColumn(name = "parent_assetID") }, inverseJoinColumns = {
+            @JoinColumn(name = "child_assetID") })
     private Set<Asset> assets;
 
     @JsonManagedReference
-    @JsonBackReference
     @OneToMany
-    @JoinColumn(name = "accountID", nullable = false)
-    private Set<Account> accounts;
+    @JoinColumn(name = "curentlyOwnedAssetID", nullable = false)
+    private Set<CurrentlyOwnedAssets> currentlyOwnedAssets;
 
     @JsonManagedReference
     @JsonBackReference
@@ -73,8 +61,7 @@ public class Asset {
     private Set<Portfolio> portfolios = new HashSet<>();
 
     @JsonManagedReference
-    @JsonBackReference
     @OneToMany(mappedBy = "asset", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Transaction> transactions = new HashSet<>();
-    
+
 }

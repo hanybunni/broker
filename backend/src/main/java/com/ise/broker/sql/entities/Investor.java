@@ -40,7 +40,6 @@ public class Investor {
     private String citizenship;
 
     @JsonManagedReference
-    @JsonBackReference
     @OneToMany(mappedBy = "investor")
     private Set<Account> accounts;
 }

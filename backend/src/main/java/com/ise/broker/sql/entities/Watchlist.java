@@ -36,7 +36,6 @@ public class Watchlist {
     @Column(name = "visibility", nullable = false)
     private String visibility;
 
-    @JsonManagedReference
     @JsonBackReference
     @ManyToMany
     @JoinTable(

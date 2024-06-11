@@ -32,22 +32,20 @@ public class Account {
     @Column(name = "currency", nullable = false)
     private String currency;
 
-    @JsonManagedReference
     @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "investorID", nullable = false)
     private Investor investor;
 
+    /*
     @JsonManagedReference
-    @JsonBackReference
     @ManyToMany(mappedBy = "accounts")
     private Set<Watchlist> watchlists = new HashSet<>();
 
     @JsonManagedReference
-    @JsonBackReference
     @OneToMany
-    @JoinColumn(name = "assetID", nullable = false)
-    private Set<Asset> assets;
+    @JoinColumn(name = "currentlyOwnedAssetID", nullable = false)
+    private Set<CurrentlyOwnedAssets> currentlyOwnedAssets;
 
     @JsonManagedReference
     @JsonBackReference
@@ -55,11 +53,7 @@ public class Account {
     private Portfolio portfolio;
 
     @JsonManagedReference
-    @JsonBackReference
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Transaction> transactions = new HashSet<>();
-
-
-
-    
+    */
 }
