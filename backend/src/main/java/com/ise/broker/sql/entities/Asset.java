@@ -36,9 +36,6 @@ public class Asset {
     @Column(name = "price", nullable = false)
     private Double price;
 
-    @Column(name = "currency", nullable = false)
-    private String currency;
-
     @JsonManagedReference
     @ManyToMany(mappedBy = "assets")
     private Set<Watchlist> watchlists = new HashSet<>();

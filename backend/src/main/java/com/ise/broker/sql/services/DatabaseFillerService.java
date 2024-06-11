@@ -25,6 +25,7 @@ public class DatabaseFillerService {
     private static final int INVESTOR_AMOUNT = 30;
     private static final int MIN_ACCOUNTS_PER_INVESTOR = 1; 
     private static final int MAX_ACCOUNTS_PER_INVESTOR = 5;
+    private static final int ASSET_AMOUNT = 10;
     private static final int MAX_ASSETS_PER_ACCOUNT = 10;
 
     public DatabaseFillerService(InvestorRepository investorRepository, AccountRepository accountRepository, AssetRepository assetRepository) {
@@ -36,7 +37,7 @@ public class DatabaseFillerService {
     public void fillDatabase() {
         List<Investor> investors = insertInvestors();
         List<Account> accounts = insertAccounts(investors);
-        //List<Asset> assets = insertAssets(accounts);
+        List<Asset> assets = insertAssets(accounts);
     }
 
     private List<Investor> insertInvestors() {
@@ -91,35 +92,28 @@ public class DatabaseFillerService {
         return accounts;
     }
 
-    /*private List<Asset> insertAssets(List<Account> accounts) {
+    private List<Asset> insertAssets(List<Account> accounts) {
         Faker faker = new Faker();
 
         String[] tickers = {"APPL", "MSFT", "NVDA", "GOOGL", "META", "TSLA",  "GME", "AMD", "DELL", "LULU"};
         String[] names = {"Apple Inc", "Microsoft Corporation", "Nvidia Corporation", "Alphabet Inc", "Meta Platforms Inc", "Tesla Inc", "Gamestop Corp", "Advanced Micro Devices Inc", "Dell Technologies", "Lululemon Athletica"};
         
-
         List<Asset> assets = new ArrayList<>();
-        for(Account account : accounts) {
-            int randomNumberOfAssets = faker.number().numberBetween(0, MAX_ASSETS_PER_ACCOUNT);
-
-            for(int i = 0; i < randomNumberOfAssets; i++) {
-                Asset asset = new Asset();
-                int randomIdx = faker.number().numberBetween(0, tickers.length-1);
-
-                String ticker = tickers[randomIdx];
-                String name = names[randomIdx];
-                double price = faker.number().randomDouble(2, 50, 250);
-                String currency = faker.currency().code();
-                asset.setTicker(ticker);
-                asset.setName(name);
-                asset.setPrice(price);
-                asset.setCurrency(currency);
-                asset.getAccounts().add(account);
-                assets.add(asset);
-            }
+    
+        for(int i = 0; i < tickers.length; i++) {
+            Asset asset = new Asset();
+            String ticker = tickers[i];
+            String name = names[i];
+            double price = faker.number().randomDouble(2, 50, 250);
+            
+            asset.setTicker(ticker);
+            asset.setName(name);
+            asset.setPrice(price);
+                
+            assets.add(asset);
         }
-
+        
         assetRepository.saveAll(assets);
         return assets;
-    }*/
+    }
 }
