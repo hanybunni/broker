@@ -36,3 +36,12 @@
     transform: rotate(360deg);
   }
 }
+
+.StockBroker-header {
+  background-color: #9cc465; 
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  text-align: center;
+  width: 100%;
+}

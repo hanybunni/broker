@@ -23,9 +23,14 @@ public class AccountController {
         return accountRepository.findAll();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{investorId}")
     public Optional<Account> getAccountById(@PathVariable Long id) {
         return accountRepository.findById(id);
+    }
+
+    @GetMapping("/byInvestor/{investorId}")
+    public List<Account> getAccountsByInvestorId(@PathVariable Long investorId) {
+        return accountRepository.findByInvestorInvestorID(investorId);
     }
     
 }

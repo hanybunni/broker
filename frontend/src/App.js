@@ -1,24 +1,40 @@
 import React from 'react';
-import FillDatabaseButton from './components/FillDatabaseComponent';
-import { Container, Row, Col } from 'react-bootstrap';
+import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { Container } from 'react-bootstrap';
+import FillDatabaseButton from './components/FillDatabaseButton';
+import SelectInvestorAndAccount from './components/SelectInvestorAndAccount'; 
+import './App.css'; 
 
+const AppContent = () => {
+  const location = useLocation();
 
-function App() {
+  const handleDatabaseFilled = () => {
+    console.log('Database has been filled');
+  };
+
   return (
-  <Container className="d-flex flex-column justify-content-center align-items-center" style={{ minHeight: '100vh', padding: '20px' }}>
-    <Row className="mb-3">
-      <Col>
-        <h1 className="text-center">Stock Broker</h1>
-      </Col>
-    </Row>
-    <Row>
-      <Col>
-        <FillDatabaseButton />
-      </Col>
-    </Row>
-  </Container>
+    <div className="App">
+      <header className="StockBroker-header">
+        <h1>Stock Broker</h1>
+      </header>
+      <Container className="mt-4">
+        {location.pathname === '/' && (
+          <FillDatabaseButton onClick={handleDatabaseFilled} />
+        )}
+        <Routes>
+          <Route path="/" element={<div />} />
+          <Route path="/select-investor-and-account" element={<SelectInvestorAndAccount />} />
+        </Routes>
+      </Container>
+    </div>
   );
-}
+};
+
+const App = () => (
+  <Router>
+    <AppContent />
+  </Router>
+);
 
 export default App;
