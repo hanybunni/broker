@@ -25,7 +25,7 @@ public class Asset {
     @Id
     @Column(name = "assetID", insertable = false, updatable = false, nullable = false, unique = true)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long investorID;
+    private Long assetID;
 
     @Column(name = "ticker", nullable = false)
     private String ticker;
@@ -41,15 +41,13 @@ public class Asset {
     private Set<Watchlist> watchlists = new HashSet<>();
 
     @JsonManagedReference
-    @JsonBackReference
     @ManyToMany(cascade = { CascadeType.ALL })
     @JoinTable(name = "assets_of_asset", joinColumns = { @JoinColumn(name = "parent_assetID") }, inverseJoinColumns = {
             @JoinColumn(name = "child_assetID") })
     private Set<Asset> assets;
 
     @JsonManagedReference
-    @OneToMany
-    @JoinColumn(name = "curentlyOwnedAssetID", nullable = false)
+    @OneToMany(mappedBy = "asset", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<CurrentlyOwnedAssets> currentlyOwnedAssets;
 
     @JsonManagedReference

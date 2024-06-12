@@ -19,6 +19,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Entity
 @Table(name = "accounts")
+
 public class Account {
 
     @Id
@@ -37,23 +38,20 @@ public class Account {
     @JoinColumn(name = "investorID", nullable = false)
     private Investor investor;
 
-    /*
     @JsonManagedReference
     @ManyToMany(mappedBy = "accounts")
     private Set<Watchlist> watchlists = new HashSet<>();
 
     @JsonManagedReference
-    @OneToMany
-    @JoinColumn(name = "currentlyOwnedAssetID", nullable = false)
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<CurrentlyOwnedAssets> currentlyOwnedAssets;
 
     @JsonManagedReference
-    @JsonBackReference
     @OneToOne(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
     private Portfolio portfolio;
 
     @JsonManagedReference
     @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Transaction> transactions = new HashSet<>();
-    */
+
 }

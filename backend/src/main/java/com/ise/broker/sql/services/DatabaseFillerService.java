@@ -1,7 +1,6 @@
 package com.ise.broker.sql.services;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*; 
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,9 +8,11 @@ import org.springframework.stereotype.Service;
 import com.github.javafaker.Faker;
 import com.ise.broker.sql.entities.Account;
 import com.ise.broker.sql.entities.Asset;
+import com.ise.broker.sql.entities.CurrentlyOwnedAssets;
 import com.ise.broker.sql.entities.Investor;
 import com.ise.broker.sql.repositories.AccountRepository;
 import com.ise.broker.sql.repositories.AssetRepository;
+import com.ise.broker.sql.repositories.CurrentlyOwnedAssetsRepository;
 import com.ise.broker.sql.repositories.InvestorRepository;
 
 @Service
@@ -21,23 +22,25 @@ public class DatabaseFillerService {
     private final InvestorRepository investorRepository;
     private final AccountRepository accountRepository;
     private final AssetRepository assetRepository;
+    private final CurrentlyOwnedAssetsRepository currentlyOwnedAssetsRepository;
 
     private static final int INVESTOR_AMOUNT = 30;
     private static final int MIN_ACCOUNTS_PER_INVESTOR = 1; 
     private static final int MAX_ACCOUNTS_PER_INVESTOR = 5;
-    private static final int ASSET_AMOUNT = 10;
-    private static final int MAX_ASSETS_PER_ACCOUNT = 10;
+    private static final int MAX_OWNED_ASSETS_PER_ACCOUNT = 10;
 
-    public DatabaseFillerService(InvestorRepository investorRepository, AccountRepository accountRepository, AssetRepository assetRepository) {
+    public DatabaseFillerService(InvestorRepository investorRepository, AccountRepository accountRepository, AssetRepository assetRepository, CurrentlyOwnedAssetsRepository currentlyOwnedAssetsRepository) {
         this.investorRepository = investorRepository;
         this.accountRepository = accountRepository;
         this.assetRepository = assetRepository;
+        this.currentlyOwnedAssetsRepository = currentlyOwnedAssetsRepository;
     }
 
     public void fillDatabase() {
         List<Investor> investors = insertInvestors();
         List<Account> accounts = insertAccounts(investors);
         List<Asset> assets = insertAssets(accounts);
+        insertCurrentlyOwnedAssets(accounts, assets);
     }
 
     private List<Investor> insertInvestors() {
@@ -116,4 +119,41 @@ public class DatabaseFillerService {
         assetRepository.saveAll(assets);
         return assets;
     }
+
+    private void insertCurrentlyOwnedAssets(List<Account> accounts, List<Asset> assets) {
+        Faker faker = new Faker();
+
+        for (Account account : accounts) {
+            int numberOfOwnedAssets = faker.number().numberBetween(0, MAX_OWNED_ASSETS_PER_ACCOUNT);
+            List<Asset> ownedAssets = getRandomUniqueAssets(assets, numberOfOwnedAssets);
+
+            for (Asset asset : ownedAssets) {
+                CurrentlyOwnedAssets currentlyOwnedAsset = new CurrentlyOwnedAssets();
+                currentlyOwnedAsset.setAccount(account);
+                currentlyOwnedAsset.setAsset(asset);
+                currentlyOwnedAsset.setNo_of_shares(faker.number().numberBetween(1, 1000));
+                currentlyOwnedAsset.setAvg_price(faker.number().randomDouble(2, 10, 500));
+                currentlyOwnedAssetsRepository.save(currentlyOwnedAsset);
+            }
+        }
+    }
+
+private List<Asset> getRandomUniqueAssets(List<Asset> assets, int numberOfAssets) {
+    List<Asset> shuffledAssets = new ArrayList<>(assets);
+    Collections.shuffle(shuffledAssets);
+
+    Set<Asset> selectedAssets = new HashSet<>();
+    List<Asset> randomAssets = new ArrayList<>();
+
+    for (Asset asset : shuffledAssets) {
+        if (selectedAssets.size() >= numberOfAssets) {
+            break; // Stop if enough unique assets were selected
+        }
+        selectedAssets.add(asset);
+        randomAssets.add(asset);
+    }
+
+    return randomAssets;
+}
+    
 }

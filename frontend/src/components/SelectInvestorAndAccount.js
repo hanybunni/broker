@@ -29,10 +29,11 @@ const SelectInvestorAndAccount = () => {
       {selectedInvestor && (
         <div style={{ marginTop: 10 }}>Please select account:</div>
       )}
-      {selectedInvestor && (
+      
         <AccountDropdown investorId={selectedInvestor} onSelectAccount={handleSelectAccount} />
-      )}
+      
        <Button 
+        variant="dark"
         onClick={handleSubmit}
         style={{ marginTop: 10 }}
       >
